@@ -13,7 +13,7 @@ interface Health {
 async function fetchKeyVaultSecrets() {
   const { serverRuntimeConfig } = getConfig();
 
-  const keyVaultName = serverRuntimeConfig.azureKeyVaultName;
+  const keyVaultName = serverRuntimeConfig.keyVaultName;
   const KVUri = `https://${keyVaultName}.vault.azure.net`;
 
   const credential = new DefaultAzureCredential();

@@ -6,7 +6,11 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 module.exports = withBundleAnalyzer({
   env: {
     APPINSIGHTS_INSTRUMENTATIONKEY: '',
-    KEY_VAULT_NAME: '',
+    KeyVaultName: '',
+  },
+  serverRuntimeConfig: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: '',
+    keyVaultName: process.env.KeyVaultName,
   },
   publicRuntimeConfig: {
     appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY,
