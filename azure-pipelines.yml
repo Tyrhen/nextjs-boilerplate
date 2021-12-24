@@ -30,8 +30,57 @@ stages:
     displayName: Build
 
     steps:
-    - script: 'echo build'
-      displayName: 'Build'
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '16.x'
+      displayName: 'Install Node.js'
+
+    - script: npm ci
+      displayName: 'Install & Build'
+
+    - script: |
+        npx print-env AGENT
+        npx print-env BUILD
+        npx print-env SYSTEM
+      displayName: Pipeline Environment
+
+    - script: npm run lint
+      displayName: 'Lint'
+
+    - script: npm run test:cover
+      displayName: 'Tests'
+
+    - task: PublishTestResults@2
+      displayName: 'Unit Test - Publish'
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: 'coverage/jest-junit/junit.xml'
+
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Code Coverage - Publish'
+      condition: succeededOrFailed()
+      inputs:
+        failIfCoverageEmpty: true
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+
+    - task: PublishHtmlReport@1
+      displayName: 'HTML Report - Publish'
+      condition: succeededOrFailed()
+      inputs:
+        reportDir: 'coverage/html-report.html'
+
+    - task: ArchiveFiles@2
+      displayName: 'Artifact - Archive'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      displayName: Artifact - Publish
 
 - stage: stageDeployDev
   displayName: Dev
