@@ -32,6 +32,9 @@ stages:
       vmImage: ubuntu-latest
 
     steps:
+    - bash: printenv | sort
+      displayName: Pipeline Environment
+
     - task: NodeTool@0
       inputs:
         versionSpec: '16.x'
@@ -39,12 +42,6 @@ stages:
 
     - script: npm ci
       displayName: 'Install & Build'
-
-    - script: |
-        npx print-env AGENT
-        npx print-env BUILD
-        npx print-env SYSTEM
-      displayName: Pipeline Environment
 
     - script: npm run lint
       displayName: 'Lint'
