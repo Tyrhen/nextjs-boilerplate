@@ -28,6 +28,8 @@ stages:
   jobs:
   - job: Build
     displayName: Build
+    pool:
+      vmImage: ubuntu-latest
 
     steps:
     - task: NodeTool@0
@@ -81,16 +83,32 @@ stages:
 
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       displayName: Artifact - Publish
+      artifact: drop
 
 - stage: stageDeployDev
   displayName: Dev
   dependsOn: stageBuild
+#  condition: and(succeeded(), eq(variables.isMain, true))
   jobs:
-    - job: jobDeploy
+    - deployment: jobDeploy
       displayName: Deploy Dev
-      steps:
-        - script: 'echo deploy dev'
-          displayName: 'Deploy'
+      environment: Dev
+      pool:
+        vmImage: ubuntu-latest
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: AzureWebApp@1
+                displayName: 'Azure Web App Deploy'
+                inputs:
+                  azureSubscription: $(azureSubscription)
+                  appType: webAppLinux
+                  appName: $(webAppName)
+                  runtimeStack: 'NODE|14-lts'
+                  package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+                  startUpCommand: 'npm run start'
+                  appSettings: -PORT 8080
 
     - job: jobDeployValidation
       displayName: E2E Tests - Dev
