@@ -63,13 +63,6 @@ stages:
         tabName: Unit Tests
 
     - task: CopyFiles@2
-      displayName: Kudu scripts
-      inputs:
-        flattenFolders: true
-        contents: .pipeline/kudu/**
-        targetFolder: $(Build.ArtifactStagingDirectory)
-
-    - task: CopyFiles@2
       displayName: Prepare Artifact
       inputs:
         contents: |
