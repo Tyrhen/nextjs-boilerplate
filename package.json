@@ -2,6 +2,9 @@
   "name": "nextjs-boilerplate",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=14"
+  },
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "scripts": {
     "prepare": "husky install",
