@@ -17,6 +17,8 @@ variables:
   environmentName: 'App-nextjs-boilerplate'
   sourceSlot: 'staging'
   resourceGroup: 'nextjs-boilerplate'
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
 
 stages:
 - stage: stageBuild
@@ -35,11 +37,31 @@ stages:
         versionSpec: '16.x'
       displayName: Install Node.js
 
-    - script: npm ci
+    - task: Cache@2
+      displayName: 'Cache npm'
+      inputs:
+        key: 'npm | "$(Agent.OS)" | package-lock.json'
+        restoreKeys: |
+          npm | "$(Agent.OS)"
+          npm
+        path: $(npm_config_cache)
+
+    - task: Cache@2
+      displayName: 'Cache Cypress'
+      inputs:
+        key: 'cypress | $(Agent.OS) | package-lock.json'
+        restoreKeys: |
+          cypress | $(Agent.OS) | package-lock.json
+        path: $(CYPRESS_CACHE_FOLDER)
+
+    - script: npm ci # --cache $(npm_config_cache)
       displayName: Install & Build
 
     - script: npm run test:cover
       displayName: Unit Tests
+
+#    - script: npm run test:e2e -- --config 'baseUrl=http://app-nextjs-boilerplate.azurewebsites.net'
+#      displayName: Cypress
 
     - task: PublishTestResults@2
       displayName: Publish Unit Test
@@ -113,7 +135,27 @@ stages:
           displayName: E2E Tests - Dev
           dependsOn: jobDeploy
           steps:
-            - script: 'echo e2e test'
+            - task: Cache@2
+              displayName: 'Cache npm'
+              inputs:
+                key: 'npm | "$(Agent.OS)" | package-lock.json'
+                restoreKeys: |
+                  npm | "$(Agent.OS)"
+                  npm
+                path: $(npm_config_cache)
+
+            - task: Cache@2
+              displayName: 'Cache Cypress'
+              inputs:
+                key: 'cypress | $(Agent.OS) | package-lock.json'
+                restoreKeys: |
+                  cypress | $(Agent.OS) | package-lock.json
+                path: $(CYPRESS_CACHE_FOLDER)
+
+            - script: npm ci --ignore-scripts
+              displayName: NPM Install
+
+            - script: npm run test:e2e:env
               displayName: Cypress
 
     - stage: stageDeployQA

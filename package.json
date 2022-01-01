@@ -22,6 +22,7 @@
     "test:e2e:open": "cypress open",
     "test:e2e:verify": "cypress verify",
     "test:e2e:ci": "start-test start 3000 test:e2e",
+    "test:e2e:env": "./node_modules/.bin/cypress run --config 'baseUrl=http://app-nextjs-boilerplate.azurewebsites.net'",
     "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
     "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
     "pre-commit": "validate-branch-name && lint-staged",
