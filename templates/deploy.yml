@@ -3,6 +3,7 @@ parameters:
     type: string
     values:
       - Dev
+      - QA
 
 jobs:
 - deployment: jobDeploy
