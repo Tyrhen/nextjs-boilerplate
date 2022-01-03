@@ -58,7 +58,7 @@ jobs:
     - script: npm ci --ignore-scripts
       displayName: NPM Install
 
-    - script: npm run test:e2e:env
+    - script: npm run test:e2e:env -- --config baseUrl=$(AppServiceApplicationUrl)
       displayName: Cypress
 
 - ${{ if contains(parameters.environmentType, 'QA') }}:
