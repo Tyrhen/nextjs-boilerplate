@@ -8,8 +8,9 @@ parameters:
       - Dev
       - QA
 
-  - name: deployToSlot
-    type: boolean
+  - name: slotName
+    type: string
+    default: production
 
 jobs:
 - deployment: jobDeploy
@@ -31,7 +32,6 @@ jobs:
               package: $(Pipeline.Workspace)/$(System.DefinitionName)
               startUpCommand: 'npm run start'
               appSettings: -PORT 8080
-              ${{ if eq(parameters.deployToSlot, true) }}
               slotName: staging
 
 - job: jobDeployValidation

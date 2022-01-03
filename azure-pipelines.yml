@@ -31,7 +31,7 @@ stages:
         parameters:
           environmentType: Dev
           appName: app-nextjs-boilerplate-prod
-          deployToSlot: true
+          slotName: staging
 
 
     - stage: stageDeployQA
