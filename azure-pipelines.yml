@@ -104,56 +104,61 @@ stages:
         artifactName: $(System.DefinitionName)
 
 - ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
-    - stage: stageDeployDev
-      displayName: Dev
-      dependsOn: stageBuild
-      jobs:
-        - deployment: jobDeploy
-          displayName: Deploy Dev
-          environment: Dev
-          pool:
-            vmImage: ubuntu-latest
-          strategy:
-            runOnce:
-              deploy:
-                steps:
-                  - task: AzureWebApp@1
-                    displayName: Deploy
-                    inputs:
-                      azureSubscription: $(azureSubscription)
-                      appType: webAppLinux
-                      appName: $(webAppName)
-                      runtimeStack: 'NODE|14-lts'
-                      package: $(Pipeline.Workspace)/$(System.DefinitionName)
-                      startUpCommand: 'npm run start'
-                      appSettings: -PORT 8080
+    - template: .pipeline/deploy.yml
+      parameters:
+        environmentType: Dev
+        dependsOn: stageBuild
 
-        - job: jobDeployValidation
-          displayName: E2E Tests - Dev
-          dependsOn: jobDeploy
-          steps:
-            - task: Cache@2
-              displayName: 'Cache npm'
-              inputs:
-                key: 'npm | "$(Agent.OS)" | package-lock.json'
-                restoreKeys: |
-                  npm | "$(Agent.OS)"
-                  npm
-                path: $(npm_config_cache)
-
-            - task: Cache@2
-              displayName: 'Cache Cypress'
-              inputs:
-                key: 'cypress | $(Agent.OS) | package-lock.json'
-                restoreKeys: |
-                  cypress | $(Agent.OS) | package-lock.json
-                path: $(CYPRESS_CACHE_FOLDER)
-
-            - script: npm ci --ignore-scripts
-              displayName: NPM Install
-
-            - script: npm run test:e2e:env
-              displayName: Cypress
+#    - stage: stageDeployDev
+#      displayName: Dev
+#      dependsOn: stageBuild
+#      jobs:
+#        - deployment: jobDeploy
+#          displayName: Deploy Dev
+#          environment: Dev
+#          pool:
+#            vmImage: ubuntu-latest
+#          strategy:
+#            runOnce:
+#              deploy:
+#                steps:
+#                  - task: AzureWebApp@1
+#                    displayName: Deploy
+#                    inputs:
+#                      azureSubscription: $(azureSubscription)
+#                      appType: webAppLinux
+#                      appName: $(webAppName)
+#                      runtimeStack: 'NODE|14-lts'
+#                      package: $(Pipeline.Workspace)/$(System.DefinitionName)
+#                      startUpCommand: 'npm run start'
+#                      appSettings: -PORT 8080
+#
+#        - job: jobDeployValidation
+#          displayName: E2E Tests - Dev
+#          dependsOn: jobDeploy
+#          steps:
+#            - task: Cache@2
+#              displayName: 'Cache npm'
+#              inputs:
+#                key: 'npm | "$(Agent.OS)" | package-lock.json'
+#                restoreKeys: |
+#                  npm | "$(Agent.OS)"
+#                  npm
+#                path: $(npm_config_cache)
+#
+#            - task: Cache@2
+#              displayName: 'Cache Cypress'
+#              inputs:
+#                key: 'cypress | $(Agent.OS) | package-lock.json'
+#                restoreKeys: |
+#                  cypress | $(Agent.OS) | package-lock.json
+#                path: $(CYPRESS_CACHE_FOLDER)
+#
+#            - script: npm ci --ignore-scripts
+#              displayName: NPM Install
+#
+#            - script: npm run test:e2e:env
+#              displayName: Cypress
 
     - stage: stageDeployQA
       displayName: QA
