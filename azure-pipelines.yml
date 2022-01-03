@@ -104,7 +104,7 @@ stages:
         artifactName: $(System.DefinitionName)
 
 - ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
-    - template: .pipeline/deploy.yml
+    - template: /.pipeline/deploy.yml
       parameters:
         environmentType: Dev
         dependsOn: stageBuild
