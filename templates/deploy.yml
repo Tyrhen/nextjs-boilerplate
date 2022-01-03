@@ -2,7 +2,7 @@ parameters:
   - name: environmentType
     type: string
     values:
-      - Dev
+    - Dev
 
 jobs:
 - deployment: jobDeploy
