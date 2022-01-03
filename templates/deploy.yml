@@ -1,8 +1,8 @@
 parameters:
-- name: environment
-  type: string
-  values:
-    - Dev
+  - name: environment
+    type: string
+    values:
+      - Dev
 
 jobs:
 - deployment: jobDeploy
