@@ -13,10 +13,6 @@ parameters:
 
 variables:
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-  webAppName: 'App-nextjs-boilerplate'
-  environmentName: 'App-nextjs-boilerplate'
-  sourceSlot: 'staging'
-  resourceGroup: 'nextjs-boilerplate'
   npm_config_cache: $(Pipeline.Workspace)/.npm
   CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
 
@@ -34,6 +30,7 @@ stages:
       - template: templates/deploy.yml
         parameters:
           environmentType: Dev
+          appName: App-nextjs-boilerplate
 
 
     - stage: stageDeployQA
@@ -43,6 +40,7 @@ stages:
       - template: templates/deploy.yml
         parameters:
           environmentType: QA
+          appName: App-nextjs-boilerplate
 
     - stage: stageDeployStaging
       displayName: Staging Prod

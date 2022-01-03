@@ -1,4 +1,7 @@
 parameters:
+  - name: appName
+    type: string
+
   - name: environmentType
     type: string
     values:
@@ -20,7 +23,7 @@ jobs:
             inputs:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
-              appName: $(webAppName)
+              appName: ${{ parameters.appName }}
               runtimeStack: 'NODE|14-lts'
               package: $(Pipeline.Workspace)/$(System.DefinitionName)
               startUpCommand: 'npm run start'
