@@ -1,7 +1,13 @@
+parameters:
+- name: environment
+  type: string
+  values:
+    - Dev
+
 jobs:
 - deployment: jobDeploy
   displayName: Deploy
-  environment: Dev
+  environment: ${{ environment }}
   pool:
     vmImage: ubuntu-latest
   strategy:

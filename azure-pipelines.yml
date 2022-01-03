@@ -110,8 +110,7 @@ stages:
       jobs:
       - template: templates/deploy.yml
         parameters:
-          environmentType: Dev
-          dependsOn: stageBuild
+          environment: Dev
 
 #        - deployment: jobDeploy
 #          displayName: Deploy Dev
