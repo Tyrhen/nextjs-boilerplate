@@ -121,19 +121,6 @@ stages:
         parameters:
           environmentType: QA
 
-      - job: jobApproval
-        displayName: Manual Approval
-        dependsOn: jobDeployValidation
-        pool: server
-        steps:
-          - task: ManualValidation@0
-            timeoutInMinutes: 1
-            inputs:
-              instructions: |
-                ✅ Acceptance criteria is met
-                ✅ Regressions pass
-              onTimeout: 'reject'
-
     - stage: stageDeployStaging
       displayName: Staging Prod
       dependsOn: stageDeployQA
