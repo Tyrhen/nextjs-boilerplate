@@ -32,7 +32,7 @@ jobs:
               startUpCommand: 'npm run start'
               appSettings: -PORT 8080
               ${{ if eq(parameters.deployToSlot, true) }}
-                slotName: staging
+              slotName: staging
 
 - job: jobDeployValidation
   displayName: E2E Tests
