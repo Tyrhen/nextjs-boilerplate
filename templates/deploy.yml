@@ -7,7 +7,7 @@ parameters:
 jobs:
 - deployment: jobDeploy
   displayName: Deploy
-  environment: ${{ environmentType }}
+  environment: ${{ parameters.environmentType }}
   pool:
     vmImage: ubuntu-latest
   strategy:
