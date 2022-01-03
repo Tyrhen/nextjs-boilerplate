@@ -60,9 +60,6 @@ stages:
     - script: npm run test:cover
       displayName: Unit Tests
 
-#    - script: npm run test:e2e -- --config 'baseUrl=http://app-nextjs-boilerplate.azurewebsites.net'
-#      displayName: Cypress
-
     - task: PublishTestResults@2
       displayName: Publish Unit Test
       condition: succeededOrFailed()
