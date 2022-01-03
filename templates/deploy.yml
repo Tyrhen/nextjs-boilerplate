@@ -7,7 +7,7 @@ parameters:
   - name: dependsOn
     type: string
 
-- stage: stageDeploy${{ environmentType }}
+- stage: stageDeployDev
     displayName: ${{ environmentType }}
     dependsOn: ${{ dependsOn }}
     jobs:
