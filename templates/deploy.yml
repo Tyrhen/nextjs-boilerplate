@@ -8,6 +8,9 @@ parameters:
       - Dev
       - QA
 
+  - name: deployToSlot
+    type: boolean
+
 jobs:
 - deployment: jobDeploy
   displayName: Deploy
@@ -28,6 +31,8 @@ jobs:
               package: $(Pipeline.Workspace)/$(System.DefinitionName)
               startUpCommand: 'npm run start'
               appSettings: -PORT 8080
+              ${{ if eq(parameters.deployToSlot, true) }}
+                slotName: staging
 
 - job: jobDeployValidation
   displayName: E2E Tests

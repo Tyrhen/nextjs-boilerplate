@@ -30,7 +30,8 @@ stages:
       - template: templates/deploy.yml
         parameters:
           environmentType: Dev
-          appName: App-nextjs-boilerplate
+          appName: app-nextjs-boilerplate-prod
+          deployToSlot: true
 
 
     - stage: stageDeployQA
