@@ -53,7 +53,7 @@ jobs:
     - script: npm run test:e2e:env
       displayName: Cypress
 
-- ${{ if contains(parameters.environmentType, 'QA')) }}:
+- ${{ if contains(parameters.environmentType, 'QA') }}:
   - job: jobApproval
     displayName: Manual Approval
     dependsOn: jobDeployValidation
