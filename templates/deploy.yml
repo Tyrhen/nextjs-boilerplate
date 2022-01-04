@@ -50,6 +50,7 @@ jobs:
 
       postRouteTraffic:
         steps:
+          - checkout: self
           - script: env | sort
             displayName: Pipeline Environment
 
