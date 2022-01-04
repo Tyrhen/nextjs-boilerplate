@@ -7,11 +7,6 @@ jobs:
     - script: env | sort
       displayName: Pipeline Environment
 
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '16.x'
-      displayName: Install Node.js
-
     - task: Cache@2
       displayName: 'Cache npm'
       inputs:
@@ -20,6 +15,11 @@ jobs:
           npm | "$(Agent.OS)"
           npm
         path: $(npm_config_cache)
+
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '16.x'
+      displayName: Install Node.js
 
     - task: Cache@2
       displayName: 'Cache Cypress'
