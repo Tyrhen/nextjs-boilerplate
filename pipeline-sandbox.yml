@@ -1,0 +1,32 @@
+trigger:
+  branches:
+    include:
+      - '*'
+
+stages:
+  - stage: deploy
+    displayName: Production
+    jobs:
+      - job: jobDeploy
+        displayName: Deploy Some Infrastructure
+        steps:
+          - bash: |
+              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]someValue"
+              echo "variable value is $(deployedAppUrl)"
+            name: setVariable
+
+          - script: env | sort
+            displayName: Pipeline Environment
+
+      - job: jobDemo
+        displayName: Demo
+        dependsOn: jobDeploy
+        variables:
+          deployedAppUrl: $[ dependencies.jobDeploy.outputs['setVariable.deployedAppUrl'] ]
+        steps:
+          - script: env | sort
+            displayName: Pipeline Environment
+
+          - bash: echo "the variable value is $(deployedAppUrl)"
+
+      - template: pipeline-sandbox-template.yml
