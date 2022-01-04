@@ -35,7 +35,8 @@ jobs:
               slotName: staging
 
           - bash: |
-              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$AZUREWEBAPP_APPSERVICEAPPLICATIONURL"
+              echo $(DEPLOY_APPSERVICEAPPLICATIONURL)
+              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$DEPLOY_APPSERVICEAPPLICATIONURL"
               echo "variable value is $(deployedAppUrl)"
             displayName: Set deployedAppUrl
 
