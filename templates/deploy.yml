@@ -41,6 +41,9 @@ jobs:
   displayName: E2E Tests
   dependsOn: jobDeploy
   steps:
+    - script: env | sort
+      displayName: Pipeline Environment\
+
     - task: Cache@2
       displayName: 'Cache npm'
       inputs:
@@ -61,7 +64,7 @@ jobs:
     - script: npm ci --ignore-scripts
       displayName: NPM Install
 
-    - script: npm run test:e2e:env -- --config baseUrl=$[ dependencies.jobDeploy.outputs['<task_name>.<variable_name>'] ]
+    - script: npm run test:e2e:env -- --config baseUrl=$(AZUREWEBAPP_APPSERVICEAPPLICATIONURL)
       displayName: Cypress
 
 - ${{ if contains(parameters.environmentType, 'QA') }}:
