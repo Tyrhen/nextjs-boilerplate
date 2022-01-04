@@ -16,8 +16,6 @@ jobs:
 - deployment: jobDeploy
   displayName: Deploy
   environment: ${{ parameters.environmentType }}
-  variables:
-    deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setvarStep.deployedAppUrl'] ]
   pool:
     vmImage: ubuntu-latest
   strategy:
@@ -43,12 +41,12 @@ jobs:
               echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
               echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(Deploy.AppServiceApplicationUrl)"
               echo "##vso[task.setvariable variable=someName;isOutput=true;]someValue"
-            name: setvarStep
+            name: setDeployedAppUrl
             displayName: Set deployedAppUrl
 
           - bash: |
-              echo "deployedAppUrl is $(setvarStep.deployedAppUrl)"
-              echo "someName is $(setvarStep.someName)"
+              echo "deployedAppUrl is $(setDeployedAppUrl.deployedAppUrl)"
+              echo "someName is $(setDeployedAppUrl.someName)"
             displayName: Use deployedAppUrl
 
           - script: env | sort
@@ -58,8 +56,8 @@ jobs:
   displayName: E2E Tests
   dependsOn: jobDeploy
   variables:
-    deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setvarStep.deployedAppUrl'] ]
-    someName: $[ dependencies.jobDeploy.outputs['jobDeploy.setvarStep.someName'] ]
+    deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setDeployedAppUrl.deployedAppUrl'] ]
+    someName: $[ dependencies.jobDeploy.outputs['jobDeploy.setDeployedAppUrl.someName'] ]
   steps:
     - script: env | sort
       displayName: Pipeline Environment
