@@ -48,7 +48,7 @@ jobs:
           - script: env | sort
             displayName: Pipeline Environment
 
-      postRouteTraffice:
+      postRouteTraffic:
         steps:
           - script: env | sort
             displayName: Pipeline Environment
