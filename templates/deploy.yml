@@ -34,12 +34,17 @@ jobs:
               appSettings: -PORT 8080
               slotName: staging
 
+          - bash: echo "##vso[task.setvariable variable=someName;isOutput=true;]$(AppServiceApplicationUrl)"
+            displayName: Set deployment url
+
           - script: env | sort
             displayName: Pipeline Environment
 
 - job: jobDeployValidation
   displayName: E2E Tests
   dependsOn: jobDeploy
+  variables:
+    AppServiceApplicationUrl: $[ dependencies.jobDeploy.outputs['setVariable.AppServiceApplicationUrl'] ]
   steps:
     - script: env | sort
       displayName: Pipeline Environment
@@ -64,7 +69,7 @@ jobs:
     - script: npm ci --ignore-scripts
       displayName: NPM Install
 
-    - script: npm run test:e2e:env -- --config baseUrl=$[ dependencies.jobDeploy.outputs['Deploy.AppServiceApplicationUrl'] ]
+    - script: npm run test:e2e:env -- --config baseUrl=$(AppServiceApplicationUrl)
       displayName: Cypress
 
 - ${{ if contains(parameters.environmentType, 'QA') }}:
