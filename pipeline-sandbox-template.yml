@@ -1,11 +1,14 @@
 jobs:
   - job: jobTemplate
-    displayName: template
+    displayName: Demo Template
     dependsOn: jobDeploy
     variables:
       deployedAppUrl: $[ dependencies.jobDeploy.outputs['setVariable.deployedAppUrl'] ]
+      deployedAppUrlEnv: $[ dependencies.jobDeploy.outputs['setVariable.deployedAppUrlEnv'] ]
     steps:
       - script: env | sort
         displayName: Pipeline Environment
 
-      - bash: echo "the variable value is $(deployedAppUrl)"
+      - bash: |
+          echo "deployedAppUrl is $(deployedAppUrl)"
+          echo "deployedAppUrlEnv is $(deployedAppUrlEnv)"

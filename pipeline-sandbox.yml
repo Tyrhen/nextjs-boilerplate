@@ -7,8 +7,25 @@ stages:
   - stage: deploy
     displayName: Production
     jobs:
+      - deployment: jobDeployEnv
+        displayName: Deploy - Env
+        environment: Dev
+        pool:
+          vmImage: $ubuntu-latest
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - bash: |
+                    echo "##vso[task.setvariable variable=deployedAppUrlEnv;isOutput=true;]someValueEnv"
+                    echo "deployedAppUrlEnv is $(deployedAppUrlEnv)"
+                  name: setVariable
+
+                - script: env | sort
+                  displayName: Pipeline Environment
+
       - job: jobDeploy
-        displayName: Deploy Some Infrastructure
+        displayName: Deploy
         steps:
           - bash: |
               echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]someValue"
@@ -23,10 +40,13 @@ stages:
         dependsOn: jobDeploy
         variables:
           deployedAppUrl: $[ dependencies.jobDeploy.outputs['setVariable.deployedAppUrl'] ]
+          deployedAppUrlEnv: $[ dependencies.jobDeploy.outputs['setVariable.deployedAppUrlEnv'] ]
         steps:
           - script: env | sort
             displayName: Pipeline Environment
 
-          - bash: echo "the variable value is $(deployedAppUrl)"
+          - bash: |
+              echo "deployedAppUrl is $(deployedAppUrl)"
+              echo "deployedAppUrlEnv is $(deployedAppUrlEnv)"
 
       - template: pipeline-sandbox-template.yml
