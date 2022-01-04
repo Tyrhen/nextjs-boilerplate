@@ -52,34 +52,36 @@ jobs:
           - script: env | sort
             displayName: Pipeline Environment
 
-#      postRouteTraffic:
-#        steps:
-#          - checkout: self
-#          - script: env | sort
-#            displayName: Pipeline Environment
-#
-#          - task: Cache@2
-#            displayName: 'Cache npm'
-#            inputs:
-#              key: 'npm | "$(Agent.OS)" | package-lock.json'
-#              restoreKeys: |
-#                npm | "$(Agent.OS)"
-#                npm
-#              path: $(npm_config_cache)
-#
-#          - task: Cache@2
-#            displayName: 'Cache Cypress'
-#            inputs:
-#              key: 'cypress | $(Agent.OS) | package-lock.json'
-#              restoreKeys: |
-#                cypress | $(Agent.OS) | package-lock.json
-#              path: $(CYPRESS_CACHE_FOLDER)
-#
-#          - script: npm ci --ignore-scripts
-#            displayName: NPM Install
-#
-#          - script: npm run test:e2e:env -- --config baseUrl=$(setvarStep.deployedAppUrl)
-#            displayName: Cypress
+      postRouteTraffic:
+        variables:
+          deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setvarStep.deployedAppUrl'] ]
+        steps:
+          - checkout: self
+          - script: env | sort
+            displayName: Pipeline Environment
+
+          - task: Cache@2
+            displayName: 'Cache npm'
+            inputs:
+              key: 'npm | "$(Agent.OS)" | package-lock.json'
+              restoreKeys: |
+                npm | "$(Agent.OS)"
+                npm
+              path: $(npm_config_cache)
+
+          - task: Cache@2
+            displayName: 'Cache Cypress'
+            inputs:
+              key: 'cypress | $(Agent.OS) | package-lock.json'
+              restoreKeys: |
+                cypress | $(Agent.OS) | package-lock.json
+              path: $(CYPRESS_CACHE_FOLDER)
+
+          - script: npm ci --ignore-scripts
+            displayName: NPM Install
+
+          - script: npm run test:e2e:env -- --config baseUrl=$(setvarStep.deployedAppUrl)
+            displayName: Cypress
 
 - job: jobDeployValidation
   displayName: E2E Tests
