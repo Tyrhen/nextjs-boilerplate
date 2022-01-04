@@ -16,6 +16,8 @@ jobs:
 - deployment: jobDeploy
   displayName: Deploy
   environment: ${{ parameters.environmentType }}
+  variables:
+    deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setvarStep.deployedAppUrl'] ]
   pool:
     vmImage: ubuntu-latest
   strategy:
@@ -53,8 +55,6 @@ jobs:
             displayName: Pipeline Environment
 
       postRouteTraffic:
-        variables:
-          deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setvarStep.deployedAppUrl'] ]
         steps:
           - checkout: self
           - script: env | sort
