@@ -35,7 +35,7 @@ jobs:
               slotName: staging
 
           - bash: |
-              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]deployedAppUrlValue"
+              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$AppServiceApplicationUrl"
               echo "##vso[task.setvariable variable=someName;isOutput=true;]someValue"
             name: setvarStep
             displayName: Set deployedAppUrl
@@ -43,7 +43,7 @@ jobs:
           - bash: |
               echo "deployedAppUrl is $(setvarStep.deployedAppUrl)"
               echo "someName is $(setvarStep.someName)"
-            displayName: Set deployedAppUrl
+            displayName: Use deployedAppUrl
 
           - script: env | sort
             displayName: Pipeline Environment
