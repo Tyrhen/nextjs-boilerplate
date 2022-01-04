@@ -35,7 +35,11 @@ jobs:
               slotName: staging
 
           - bash: |
-              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$AppServiceApplicationUrl"
+              echo "DEPLOY_APPSERVICEAPPLICATIONURL is $DEPLOY_APPSERVICEAPPLICATIONURL"
+              echo "AppServiceApplicationUrl is $AppServiceApplicationUrl"
+              echo "AppServiceApplicationUrl is $(AppServiceApplicationUrl)"
+              echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
+              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(Deploy.AppServiceApplicationUrl)"
               echo "##vso[task.setvariable variable=someName;isOutput=true;]someValue"
             name: setvarStep
             displayName: Set deployedAppUrl
