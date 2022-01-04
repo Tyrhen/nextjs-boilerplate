@@ -23,7 +23,7 @@ jobs:
       deploy:
         steps:
           - task: AzureWebApp@1
-            displayName: Deploy
+            name: Deploy
             inputs:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
@@ -42,7 +42,7 @@ jobs:
   dependsOn: jobDeploy
   steps:
     - script: env | sort
-      displayName: Pipeline Environment\
+      displayName: Pipeline Environment
 
     - task: Cache@2
       displayName: 'Cache npm'
@@ -64,7 +64,7 @@ jobs:
     - script: npm ci --ignore-scripts
       displayName: NPM Install
 
-    - script: npm run test:e2e:env -- --config baseUrl=$(AZUREWEBAPP_APPSERVICEAPPLICATIONURL)
+    - script: npm run test:e2e:env -- --config baseUrl=$[ dependencies.jobDeploy.outputs['Deploy.AppServiceApplicationUrl'] ]
       displayName: Cypress
 
 - ${{ if contains(parameters.environmentType, 'QA') }}:
