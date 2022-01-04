@@ -34,6 +34,9 @@ jobs:
               appSettings: -PORT 8080
               slotName: staging
 
+          - script: env | sort
+            displayName: Pipeline Environment
+
 - job: jobDeployValidation
   displayName: E2E Tests
   dependsOn: jobDeploy
@@ -58,7 +61,7 @@ jobs:
     - script: npm ci --ignore-scripts
       displayName: NPM Install
 
-    - script: npm run test:e2e:env -- --config baseUrl=$(AppServiceApplicationUrl)
+    - script: npm run test:e2e:env -- --config baseUrl=$[ dependencies.jobDeploy.outputs['<task_name>.<variable_name>'] ]
       displayName: Cypress
 
 - ${{ if contains(parameters.environmentType, 'QA') }}:
