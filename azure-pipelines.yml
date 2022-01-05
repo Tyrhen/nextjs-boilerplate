@@ -35,6 +35,7 @@ stages:
 - ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
     - stage: stageDeployQA
       displayName: QA
+      dependsOn: stageBuild
       jobs:
       - template: templates/deploy-rm.yml
         parameters:
