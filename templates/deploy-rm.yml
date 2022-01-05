@@ -22,10 +22,6 @@ jobs:
     runOnce:
       deploy:
         steps:
-          - task: DownloadBuildArtifacts@0
-            inputs:
-              artifactName: $(Pipeline.Workspace)/$(System.DefinitionName)
-
           - task: AzureRmWebAppDeployment@4
             name: Deploy
             enabled: true
