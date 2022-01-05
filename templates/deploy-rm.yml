@@ -38,17 +38,17 @@ jobs:
               resourceGroupName: nextjs-boilerplate
               package: $(Pipeline.Workspace)/$(System.DefinitionName)
 
-          - task: AzureWebApp@1
-            name: Deploy
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: ${{ parameters.appName }}
-              runtimeStack: 'NODE|14-lts'
-              package: $(Pipeline.Workspace)/$(System.DefinitionName)
-              startUpCommand: 'npm run start'
-              appSettings: -PORT 8080
-              slotName: staging
+#          - task: AzureWebApp@1
+#            name: Deploy
+#            inputs:
+#              azureSubscription: $(azureSubscription)
+#              appType: webAppLinux
+#              appName: ${{ parameters.appName }}
+#              runtimeStack: 'NODE|14-lts'
+#              package: $(Pipeline.Workspace)/$(System.DefinitionName)
+#              startUpCommand: 'npm run start'
+#              appSettings: -PORT 8080
+#              slotName: staging
 
           - bash: |
               echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
