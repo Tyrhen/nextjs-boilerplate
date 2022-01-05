@@ -32,7 +32,6 @@ jobs:
               package: $(Pipeline.Workspace)/$(System.DefinitionName)
               startUpCommand: 'npm run start'
               appSettings: -PORT 8080
-              slotName: staging
 
           - bash: |
               echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
