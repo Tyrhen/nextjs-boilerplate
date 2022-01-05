@@ -1,0 +1,107 @@
+parameters:
+  - name: appName
+    type: string
+
+  - name: environmentType
+    type: string
+    values:
+      - Dev
+      - QA
+
+  - name: slotName
+    type: string
+    default: production
+
+jobs:
+- deployment: jobDeploy
+  displayName: Deploy
+  environment: ${{ parameters.environmentType }}
+  pool:
+    vmImage: ubuntu-latest
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: $(Pipeline.Workspace)/$(System.DefinitionName)
+
+          - task: AzureRmWebAppDeployment@4
+            name: Deploy
+            enabled: true
+            inputs:
+              azureSubscription: $(azureSubscription)
+              webAppKind: webAppLinux
+              webAppName: ${{ parameters.appName }}
+              deployToSlotOrASE: true
+              slotName: staging
+              resourceGroupName: nextjs-boilerplate
+              package: $(Pipeline.Workspace)/$(System.DefinitionName)
+
+          - task: AzureWebApp@1
+            name: Deploy
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webAppLinux
+              appName: ${{ parameters.appName }}
+              runtimeStack: 'NODE|14-lts'
+              package: $(Pipeline.Workspace)/$(System.DefinitionName)
+              startUpCommand: 'npm run start'
+              appSettings: -PORT 8080
+              slotName: staging
+
+          - bash: |
+              echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
+              echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(Deploy.AppServiceApplicationUrl)"
+            name: setDeployedAppUrl
+            displayName: Set deployedAppUrl
+
+          - script: env | sort
+            displayName: Pipeline Environment
+
+- job: jobDeployValidation
+  displayName: E2E Tests
+  dependsOn: jobDeploy
+  variables:
+    deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setDeployedAppUrl.deployedAppUrl'] ]
+  steps:
+    - script: env | sort
+      displayName: Pipeline Environment
+
+    - task: Cache@2
+      displayName: 'Cache npm'
+      inputs:
+        key: 'npm | "$(Agent.OS)" | package-lock.json'
+        restoreKeys: |
+          npm | "$(Agent.OS)"
+          npm
+        path: $(npm_config_cache)
+
+    - task: Cache@2
+      displayName: 'Cache Cypress'
+      inputs:
+        key: 'cypress | $(Agent.OS) | package-lock.json'
+        restoreKeys: |
+          cypress | $(Agent.OS) | package-lock.json
+        path: $(CYPRESS_CACHE_FOLDER)
+
+    - script: npm ci --ignore-scripts
+      displayName: NPM Install
+
+    - script: npm run test:e2e:env -- --config baseUrl=$(deployedAppUrl)
+      displayName: Cypress
+
+- ${{ if contains(parameters.environmentType, 'QA') }}:
+  - job: jobApproval
+    displayName: Manual Approval
+    dependsOn: jobDeployValidation
+    pool: server
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 1
+        inputs:
+          instructions: |
+            ✅ Acceptance criteria is met
+            ✅ Regressions pass
+          onTimeout: 'reject'
+

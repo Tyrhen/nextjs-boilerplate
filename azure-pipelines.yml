@@ -38,7 +38,7 @@ stages:
       displayName: QA
       dependsOn: stageDeployDev
       jobs:
-      - template: templates/deploy.yml
+      - template: templates/deploy-rm.yml
         parameters:
           environmentType: QA
           appName: App-nextjs-boilerplate
