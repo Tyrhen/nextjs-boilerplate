@@ -22,20 +22,19 @@ stages:
   jobs:
   - template: templates/build.yml
 
+- stage: stageDeployDev
+  displayName: Dev
+  dependsOn: stageBuild
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      environmentType: Dev
+      appName: app-nextjs-boilerplate
+
 - ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
-    - stage: stageDeployDev
-      displayName: Dev
-      dependsOn: stageBuild
-      jobs:
-      - template: templates/deploy.yml
-        parameters:
-          environmentType: Dev
-          appName: app-nextjs-boilerplate
-
-
     - stage: stageDeployQA
       displayName: QA
-      dependsOn: stageDeployDev
       jobs:
       - template: templates/deploy-rm.yml
         parameters:
