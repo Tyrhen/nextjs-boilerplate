@@ -70,6 +70,7 @@ jobs:
           !lint-staged.config.js
           !prettier.config.js
           !.npmrc
+          !package*
         targetFolder: $(Build.ArtifactStagingDirectory)
 
     - task: PublishPipelineArtifact@1
