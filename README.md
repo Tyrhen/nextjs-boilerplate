@@ -30,6 +30,14 @@ npm install
 
 Then, run the development server:
 
+## With Docker
+
+```bash
+docker compose up
+```
+
+## Without Docker
+
 ```bash
 npm run dev
 ```
