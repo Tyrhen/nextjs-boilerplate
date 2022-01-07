@@ -7,7 +7,7 @@ trigger:
 - main
 
 parameters:
-  - name: forceDeploy
+  - name: pullRequest
     type: boolean
     default: false
 
@@ -25,80 +25,79 @@ stages:
 - stage: stageDeployDev
   displayName: Dev
   dependsOn: stageBuild
-  condition: eq(variables['Build.Reason'], 'PullRequest')
+  condition: and(succeeded(), eq(${{ parameters.pullRequest }},
   jobs:
   - template: templates/deploy.yml
     parameters:
       environmentType: Dev
       appName: app-nextjs-boilerplate
 
-- ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
-    - stage: stageDeployQA
-      displayName: QA
-      dependsOn: stageBuild
-      jobs:
-      - template: templates/deploy-rm.yml
-        parameters:
-          environmentType: QA
-          appName: App-nextjs-boilerplate-qa
+- stage: stageDeployQA
+  displayName: QA
+  dependsOn: stageBuild
+  jobs:
+  - template: templates/deploy-rm.yml
+    parameters:
+      environmentType: QA
+      appName: App-nextjs-boilerplate-qa
 
-    - stage: stageDeployStaging
-      displayName: Staging Prod
-      dependsOn: stageDeployQA
-      jobs:
-        - job: jobDeploy
-          displayName: Deploy Staging
+- stage: stageDeployStaging
+  displayName: Staging Prod
+  dependsOn: stageDeployQA
+  jobs:
+    - job: jobDeploy
+      displayName: Deploy Staging
 
-          steps:
-            - script: 'echo deploy Staging'
-              displayName: Deploy
+      steps:
+        - script: 'echo deploy Staging'
+          displayName: Deploy
 
-        - job: jobDeployValidation
-          displayName: E2E Tests Staging
-          dependsOn: jobDeploy
-          steps:
-            - script: 'echo e2e test'
-              displayName: Cypress
+    - job: jobDeployValidation
+      displayName: E2E Tests Staging
+      dependsOn: jobDeploy
+      steps:
+        - script: 'echo e2e test'
+          displayName: Cypress
 
-        - job: jobApproval
-          displayName: Manual Approval
-          dependsOn: jobDeployValidation
-          pool: server
-          steps:
-            - task: ManualValidation@0
-              timeoutInMinutes: 1
-              inputs:
-                instructions: |
-                  ✅ Acceptance criteria is met
-                  ✅ Regressions pass
-                onTimeout: 'reject'
+    - job: jobApproval
+      displayName: Manual Approval
+      dependsOn: jobDeployValidation
+      pool: server
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1
+          inputs:
+            instructions: |
+              ✅ Acceptance criteria is met
+              ✅ Regressions pass
+            onTimeout: 'reject'
 
-    - stage: stageDeployProd
-      displayName: Prod
-      dependsOn: stageDeployStaging
-      jobs:
-        - job: jobDeploy
-          displayName: Deploy Prod
-          steps:
-            - script: 'echo deploy Prod'
-              displayName: Deploy
+- stage: stageDeployProd
+  displayName: Prod
+  dependsOn: stageDeployStaging
+  jobs:
+    - job: jobDeploy
+      displayName: Deploy Prod
+      steps:
+        - script: 'echo deploy Prod'
+          displayName: Deploy
 
-        - job: jobDeployValidation
-          displayName: E2E Tests Prod
-          dependsOn: jobDeploy
-          steps:
-            - script: 'echo e2e test'
-              displayName: Cypress
+    - job: jobDeployValidation
+      displayName: E2E Tests Prod
+      dependsOn: jobDeploy
+      steps:
+        - script: 'echo e2e test'
+          displayName: Cypress
 
-        - job: jobApproval
-          displayName: Manual Approval
-          dependsOn: jobDeployValidation
-          pool: server
-          steps:
-            - task: ManualValidation@0
-              timeoutInMinutes: 1
-              inputs:
-                instructions: |
-                  ✅ Acceptance criteria is met
-                  ✅ Regressions pass
-                onTimeout: 'reject'
+    - job: jobApproval
+      displayName: Manual Approval
+      dependsOn: jobDeployValidation
+      pool: server
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1
+          inputs:
+            instructions: |
+              ✅ Acceptance criteria is met
+              ✅ Regressions pass
+            onTimeout: 'reject'
