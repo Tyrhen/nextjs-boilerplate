@@ -41,7 +41,7 @@ variables:
   cyCacheDir: /home/vsts/.cache/Cypress
   npm_config_cache: $(Pipeline.Workspace)/.npm
   nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
-  cacheVersion: v1
+  cacheVersion: v2
 
 stages:
   - stage: stageBuild
