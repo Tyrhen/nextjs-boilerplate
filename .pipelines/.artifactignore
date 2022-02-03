@@ -4,6 +4,8 @@
 # include only production files
 !/.deployment
 !/.env
+!/.npmrc
+!/.yarnrc
 !/next-env.d.ts
 !/next.config.js
 !/package-lock.json
