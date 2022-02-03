@@ -30,5 +30,5 @@ steps:
       npm set-script postinstall ""
     displayName: Disable Scripts
 
-  - script: npm ci --cache $(npm_config_cache)
+  - script: yarn install
     displayName: Install
