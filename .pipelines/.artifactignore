@@ -12,3 +12,4 @@
 !/src
 !/styles
 !/tsconfig.json
+!/yarn.lock
