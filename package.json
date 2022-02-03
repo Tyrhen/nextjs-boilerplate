@@ -4,7 +4,6 @@
   "license": "ISC",
   "engines": {
     "node": "~16",
-    "npm": "please-use-yarn",
     "yarn": ">= 1.19.1"
   },
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
