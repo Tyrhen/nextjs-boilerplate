@@ -1,13 +1,15 @@
 steps:
+  - script: yarn config set cache-folder $(YARN_CACHE_FOLDER)
+    displayName: Yarn set cache folder
+
   - task: Cache@2
-    displayName: Cache npm
+    displayName: Cache yarn
     inputs:
       key: yarn | $(cacheVersion) | $(Agent.OS) | yarn.lock
       restoreKeys: |
         yarn | $(cacheVersion) | $(Agent.OS)
         yarn | $(cacheVersion)
       path: $(YARN_CACHE_FOLDER)
-      cacheHitVar: YARN_CACHE_RESTORED
 
   - task: Cache@2
     displayName: Cache Cypress
@@ -30,5 +32,6 @@ steps:
       npm set-script postinstall ""
     displayName: Disable Scripts
 
-  - script: yarn install
-    displayName: Install
+  # Runs an install as long as a lockfile is present
+  - script: yarn install --frozen-lockfile
+    displayName: Install Packages via Yarn
