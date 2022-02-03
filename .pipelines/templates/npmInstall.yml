@@ -6,7 +6,7 @@ steps:
       restoreKeys: |
         yarn | $(cacheVersion) | $(Agent.OS)
         yarn | $(cacheVersion)
-      path: $(yarn_config_cache)
+      path: $(YARN_CACHE_FOLDER)
       cacheHitVar: YARN_CACHE_RESTORED
 
   - task: Cache@2

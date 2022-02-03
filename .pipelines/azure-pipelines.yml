@@ -39,7 +39,7 @@ variables:
 
   # pipeline
   cyCacheDir: /home/vsts/.cache/Cypress
-  npm_config_cache: $(Pipeline.Workspace)/.yarn
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
   nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
   cacheVersion: v2
 
