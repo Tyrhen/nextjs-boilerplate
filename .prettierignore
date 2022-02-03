@@ -1,6 +1,7 @@
 .deployment
 .idea
 .next
+.pipelines/**/*
 .prettierignore
 .vscode
 .yarnrc
