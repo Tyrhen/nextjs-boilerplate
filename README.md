@@ -31,7 +31,7 @@ npm install
 Then, run the development server:
 
 ```bash
-npm run dev
+yarn dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to start.
@@ -112,69 +112,69 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 ## Unit tests
 
 ```bash
-npm run test    # runs all tests, creating test report
+yarn test    # runs all tests, creating test report
 ```
 
 ```bash
-npm run test:open    # opens the test report
+yarn test:open    # opens the test report
 ```
 
 ```bash
-npm run test:cover    # runs all tests, creating coverage report
+yarn test:cover    # runs all tests, creating coverage report
 ```
 
 ```bash
-npm run test:cover:open    # opens the coverage report
+yarn test:cover:open    # opens the coverage report
 ```
 
 ## End-to-end (e2e)
 
 ```bash
-npm run test:e2e    # within the cli, runs end-to-end (e2e) tests
+yarn test:e2e    # within the cli, runs end-to-end (e2e) tests
 ```
 
 ```bash
-npm run test:e2e:open    # visualize end-to-end (e2e) tests
+yarn test:e2e:open    # visualize end-to-end (e2e) tests
 ```
 
 ```bash
-npm run test:e2e:verify    # validates end-to-end (e2e) tests ability to run
+yarn test:e2e:verify    # validates end-to-end (e2e) tests ability to run
 ```
 
 ```bash
-npm run test:e2e:ci    # runs end-to-end (e2e) tests for continuous integration (ci) pipeline
+yarn test:e2e:ci    # runs end-to-end (e2e) tests for continuous integration (ci) pipeline
 ```
 
 ```bash
-npm run test:e2e:report    # opens html report from end-to-end (e2e) test results
+yarn test:e2e:report    # opens html report from end-to-end (e2e) test results
 ```
 
 ## Static code analysis
 
 ```bash
-npm run lint    # runs lint check, produces report
+yarn lint    # runs lint check, produces report
 ```
 
 ```bash
-npm run lint:fix    # runs lint and fixes, produces report
+yarn lint:fix    # runs lint and fixes, produces report
 ```
 
 ## Utility scripts
 
 ```bash
-npm run prepare   # installs husky hook - this lints the app before each commit
+yarn prepare   # installs husky hook - this lints the app before each commit
 ```
 
 ```bash
-npm run format   # run code format check
+yarn format   # run code format check
 ```
 
 ```bash
-npm run format:fix   # run fix code formatting
+yarn format:fix   # run fix code formatting
 ```
 
 ```bash
-npm run pre-commit   # this is ran prior to a git commit - runs lint and checks branch name
+yarn pre-commit   # this is ran prior to a git commit - runs lint and checks branch name
 ```
 
 # IDE-configuration
@@ -266,5 +266,5 @@ git commit -m "commit message" --no-verify
 Run locally
 
 ```shell
-npm run storybook
+yarn storybook
 ```

@@ -9,13 +9,13 @@ jobs:
 
       - template: npmInstall.yml
 
-      - script: npm run build
+      - script: yarn build
         displayName: App Build
 
-      - script: npm run test:cover
+      - script: yarn test:cover
         displayName: Unit Tests
 
-      - script: npm run test:e2e:ci
+      - script: yarn test:e2e:ci
         displayName: E2E CI
         condition: eq('false', variables.skipE2eTests)
 

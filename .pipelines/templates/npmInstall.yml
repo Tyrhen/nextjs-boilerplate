@@ -2,17 +2,17 @@ steps:
   - task: Cache@2
     displayName: Cache npm
     inputs:
-      key: npm | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      key: yarn | $(cacheVersion) | $(Agent.OS) | yarn.lock
       restoreKeys: |
-        npm | $(cacheVersion) | $(Agent.OS)
-        npm | $(cacheVersion)
-      path: $(npm_config_cache)
-      cacheHitVar: NPM_CACHE_RESTORED
+        yarn | $(cacheVersion) | $(Agent.OS)
+        yarn | $(cacheVersion)
+      path: $(yarn_config_cache)
+      cacheHitVar: YARN_CACHE_RESTORED
 
   - task: Cache@2
     displayName: Cache Cypress
     inputs:
-      key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      key: cypress | $(cacheVersion) | $(Agent.OS) | yarn.lock
       restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
       path: $(cyCacheDir)
       cacheHitVar: CYPRESS_CACHE_RESTORED
@@ -20,7 +20,7 @@ steps:
   - task: Cache@2
     displayName: Cache nextjs
     inputs:
-      key: next | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      key: next | $(cacheVersion) | $(Agent.OS) | yarn.lock
       restoreKeys: next | $(cacheVersion) | $(Agent.OS)
       path: $(nextCacheDir)
       cacheHitVar: NEXT_CACHE_RESTORED

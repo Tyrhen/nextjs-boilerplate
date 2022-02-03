@@ -3,13 +3,12 @@ name: Coverage
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,31 +16,30 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run the tests
-      run: npm run test:cover
+      - name: Run the tests
+        run: yarn test:cover
 
-#    - name: Upload coverage to Codecov
-#      uses: codecov/codecov-action@v1
-#      with:
-#        token: ${{ secrets.CODECOV_TOKEN }}
-#        fail_ci_if_error: true
+      #    - name: Upload coverage to Codecov
+      #      uses: codecov/codecov-action@v1
+      #      with:
+      #        token: ${{ secrets.CODECOV_TOKEN }}
+      #        fail_ci_if_error: true
 
-    - name: Upload coverage to Code Climate
-      if: always()
-      uses: paambaati/codeclimate-action@v2.7.5
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
-      with:
-        coverageLocations: ./coverage/lcov.info:lcov
-
+      - name: Upload coverage to Code Climate
+        if: always()
+        uses: paambaati/codeclimate-action@v2.7.5
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
+        with:
+          coverageLocations: ./coverage/lcov.info:lcov

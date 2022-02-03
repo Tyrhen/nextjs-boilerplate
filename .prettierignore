@@ -2,6 +2,8 @@
 .next
 .prettierignore
 .vscode
+.yarnrc
 coverage
 node_modules
 out
+yarn.lock

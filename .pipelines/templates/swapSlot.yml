@@ -69,5 +69,5 @@ jobs:
 
           - template: npmInstall.yml
 
-          - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
+          - script: yarn test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
             displayName: Cypress

@@ -1,10 +1,11 @@
 {
   "name": "nextjs-boilerplate",
   "version": "0.1.0",
-  "private": true,
+  "license": "ISC",
   "engines": {
     "node": "~16",
-    "npm": "~8"
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.19.1"
   },
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "scripts": {
@@ -13,7 +14,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "start:prod": "npm run build && npm run start:pm2",
+    "start:prod": "yarn run build && yarn run start:pm2",
     "start:pm2": "pm2 start ecosystem.config.js --no-daemon",
     "lint": "next lint . -f table",
     "lint:fix": "eslint --fix . -f table",

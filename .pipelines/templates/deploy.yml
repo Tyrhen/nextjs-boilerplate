@@ -121,5 +121,5 @@ jobs:
 
           - template: npmInstall.yml
 
-          - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
+          - script: yarn test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
             displayName: Cypress
