@@ -3,13 +3,18 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-trigger:
-  batch: true
-  branches:
-    include:
-      - main
-
+trigger: none
 pr: none
+
+resources:
+  pipelines:
+    - pipeline: build
+      source: auctions-checkout-microsite-build
+      branch: master
+      trigger:
+        branches:
+          include:
+            - master
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -25,7 +30,7 @@ parameters:
 
   - name: skipE2eTests
     type: boolean
-    default: true   # set to false for e2e tests to run
+    default: true # set to false for e2e tests to run
 
 variables:
   - template: templates/variables.yml
@@ -33,11 +38,6 @@ variables:
       skipE2eTests: ${{ parameters.skipE2eTests }}
 
 stages:
-  - stage: stageBuild
-    displayName: Build
-    jobs:
-      - template: templates/build.yml
-
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild

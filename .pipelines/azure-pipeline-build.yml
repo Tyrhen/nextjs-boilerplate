@@ -1,6 +1,11 @@
-trigger: none
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+
 pr:
-- main
+  - main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -8,7 +13,7 @@ pool:
 parameters:
   - name: skipE2eTests
     type: boolean
-    default: true   # set to false for e2e tests to run
+    default: true # set to false for e2e tests to run
 
 variables:
   - template: templates/variables.yml

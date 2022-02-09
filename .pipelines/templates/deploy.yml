@@ -48,15 +48,18 @@ jobs:
           runOnce:
             deploy:
               steps:
-                - download: current
-                  artifact: $(buildPackageName)
+                - script: env | sort
+                  displayName: Pipeline Environment
+
+                - download: build
+                  artifact: $(buildArtifactName)
 
                 - script: |
                     cat << EOF >> .env
                     CI_BUILD_NUMBER = $(ciBuildNumber)
                     EOF
                   displayName: .BuildNumber
-                  workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+                  workingDirectory: $(buildArtifactPath)
 
                 - task: AzureWebApp@1
                   name: taskDeployAppService
@@ -67,7 +70,7 @@ jobs:
                     appType: webAppLinux
                     appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                     runtimeStack: 'NODE|16-lts'
-                    package: $(Pipeline.Workspace)/$(buildPackageName)
+                    package: $(buildArtifactPath)
                     slotName: ${{ parameters.slotName }}
 
                 - bash: echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"

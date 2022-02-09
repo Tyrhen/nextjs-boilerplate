@@ -13,6 +13,7 @@ variables:
   # artifact
   buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
   buildArtifactName: $(Resources.Pipeline.Build.PipelineName)-$(Resources.Pipeline.Build.RunName)
+  buildArtifactPath: $(Agent.BuildDirectory)/build/$(buildArtifactName)
   ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
 
   # azure
