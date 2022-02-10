@@ -51,6 +51,10 @@ jobs:
                 - download: current
                   artifact: $(buildPackageName)
 
+                - script: npm run ci:set-build-number
+                  displayName: Set BuildNumber
+                  workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+
                 - task: AzureWebApp@1
                   name: taskDeployAppService
                   displayName: Azure Deploy

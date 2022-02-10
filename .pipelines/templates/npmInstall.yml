@@ -28,9 +28,5 @@ steps:
   - script: |
       npm set-script prepare ""
       npm set-script postinstall ""
-    displayName: Disable Scripts
-
-  - script: |
       npm install
-      npm run ci:set-build-number
     displayName: Install
