@@ -31,7 +31,6 @@ steps:
     displayName: Disable Scripts
 
   - script: |
-      npm install -g json
+      npm install
       npm run ci:set-build-number
-      npm ci
     displayName: Install
