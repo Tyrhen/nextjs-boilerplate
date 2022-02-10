@@ -51,7 +51,9 @@ jobs:
                 - download: current
                   artifact: $(buildPackageName)
 
-                - script: npm run ci:set-build-number
+                - script: |
+                    npm install -g json
+                    npm run ci:set-build-number
                   displayName: Set BuildNumber
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
