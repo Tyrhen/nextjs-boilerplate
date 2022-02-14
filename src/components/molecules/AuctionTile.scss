@@ -1,0 +1,184 @@
+@import '~@kmx/legos-theme/src/colors/index';
+@import '~@kmx/legos-theme/src/typography/mixins';
+@import '~@kmx/legos-theme/src/functions';
+
+$size: rem-calc(40px);
+$border-width: 1px;
+
+.dealer-image-container {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  background-color: kmx-color('blue', 100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dealer-info-container {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.selected-container {
+  border-top-right-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $size;
+  height: $size;
+  position: absolute;
+  right: -2px;
+  top: -2px;
+  background: linear-gradient(to left bottom, kmx-color('blue', 700) 50%, transparent 50%);
+}
+
+.vehicle-count {
+  color: kmx-color('slate', 900);
+  margin-top: auto;
+}
+
+.paytype-limits {
+  display: none;
+}
+
+.check-icon {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+}
+
+.change-dealer-link {
+  display: none;
+  font-family: $kmx-typography-font-alt;
+  color: kmx-color('blue', 600);
+  line-height: 1.563;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.dealercard {
+  height: 156px;
+  overflow: hidden;
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  cursor: pointer;
+}
+
+.dealercard--small {
+  height: initial;
+  cursor: auto;
+
+  .vehicle-count,
+  .paytype-limits,
+  .dealer-address {
+    display: none;
+  }
+
+  .change-dealer-link {
+    display: block;
+  }
+
+  .dealer-info-container {
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &.show-mobile-only {
+    display: none;
+    margin-top: 1rem;
+
+    @include mq($until: medium) {
+      display: flex;
+    }
+  }
+}
+
+.dealercard--limit--small {
+  height: initial;
+  cursor: auto;
+
+  .kmx-typography--body-1 {
+    color: kmx-color('slate', 900);
+  }
+
+  .vehicle-count,
+  .change-dealer-link,
+  .dealer-address {
+    display: none;
+  }
+
+  .paytype-limits {
+    display: block;
+  }
+
+  .dealer-info-container {
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &.show-mobile-only {
+    display: none;
+    margin-top: 1rem;
+
+    @include mq($until: medium) {
+      display: flex;
+    }
+  }
+}
+
+.image-placeholder {
+  color: kmx-color('blue', 900);
+}
+
+.dealer-title {
+  @include font-weight('bold');
+
+  font-size: 1rem;
+  font-family: $kmx-typography-font-alt;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-selected {
+  border: $border-width solid kmx-color('blue', 700);
+}
+
+.tile-check {
+  box-sizing: border-box;
+  align-items: flex-end;
+  background-color: kmx-color('blue', 700);
+  color: $white;
+  display: flex;
+  justify-content: center;
+  padding: size('xs');
+  position: absolute;
+  height: 64px;
+  right: -64px;
+  top: -64px;
+  width: 64px;
+  transform: translate(0, 0) rotate(45deg);
+  transition: transform 250ms ease-in-out;
+
+  svg {
+    fill: currentColor;
+    transform: rotate(-45deg);
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.tile-check-selected {
+  transform: translate((-32px + $border-width), (32px - $border-width)) rotate(45deg);
+}
+
+.ellipsis-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
